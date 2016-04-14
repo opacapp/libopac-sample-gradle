@@ -1,0 +1,17 @@
+group 'libopac-sample-gradle'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.7
+
+mainClassName = 'net.opacapp.sample.libopacgradle.HelloOpac'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'net.opacapp:libopac:4.5.0-rc-2'
+}
