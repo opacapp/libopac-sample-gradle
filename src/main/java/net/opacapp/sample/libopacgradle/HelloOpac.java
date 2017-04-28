@@ -2,7 +2,7 @@ package net.opacapp.sample.libopacgradle;
 
 import de.geeksfactory.opacclient.OpacApiFactory;
 import de.geeksfactory.opacclient.apis.OpacApi;
-import de.geeksfactory.opacclient.objects.DetailledItem;
+import de.geeksfactory.opacclient.objects.DetailedItem;
 import de.geeksfactory.opacclient.objects.Library;
 import de.geeksfactory.opacclient.objects.SearchRequestResult;
 import de.geeksfactory.opacclient.searchfields.SearchField;
@@ -42,7 +42,7 @@ public class HelloOpac {
         System.out.println("First match: " + searchRequestResult.getResults().get(0).toString());
 
         System.out.println("Fetching details for the first result...");
-        DetailledItem detailledItem = api.getResult(0);
-        System.out.println("Got details: " + detailledItem.toString());
+        DetailedItem detailedItem = api.getResult(0);
+        System.out.println("Got details: " + detailedItem.toString());
     }
 }
