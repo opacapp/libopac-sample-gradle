@@ -13,5 +13,5 @@ repositories {
 }
 
 dependencies {
-    compile 'net.opacapp:libopac:4.5.0-rc-2'
+    compile 'net.opacapp:libopac:5.2.5'
 }
