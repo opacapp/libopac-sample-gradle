@@ -1,4 +1,4 @@
-package net.opacapp.sample.libopacgradle;
+package de.codefor.opacapi;
 
 import de.geeksfactory.opacclient.OpacApiFactory;
 import de.geeksfactory.opacclient.apis.OpacApi;
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HelloOpac {
+public class OpacAPI {
 
     public static String LIBRARY_NAME = "Bremen";
     public static String LIBRARY_CONFIG = "{\"account_supported\":true,\"api\":\"sisis\",\"city\":\"Bremen\",\"country\":\"Deutschland\",\"data\":{\"baseurl\":\"https://opac.stadtbibliothek-bremen.de/webOPACClient\"},\"geo\":[53.07929619999999,8.8016937],\"information\":\"http://www.stadtbibliothek-bremen.de/bibliotheken.php\",\"replacedby\":\"de.opacapp.bremen\",\"state\":\"Bremen\",\"title\":\"Stadtbibliothek\"}";

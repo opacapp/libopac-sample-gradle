@@ -1,4 +1,4 @@
-group 'libopac-sample-gradle'
+group 'opacapi'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
@@ -6,7 +6,8 @@ apply plugin: 'application'
 
 sourceCompatibility = 1.7
 
-mainClassName = 'net.opacapp.sample.libopacgradle.HelloOpac'
+// mainClassName = 'net.opacapp.sample.libopacgradle.HelloOpac'
+mainClassName = 'de.codefor.opacapi.OpacAPI'
 
 repositories {
     jcenter()
