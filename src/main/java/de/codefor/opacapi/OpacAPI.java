@@ -2,6 +2,7 @@ package de.codefor.opacapi;
 
 import de.geeksfactory.opacclient.OpacApiFactory;
 import de.geeksfactory.opacclient.apis.OpacApi;
+import de.geeksfactory.opacclient.apis.Open;
 import de.geeksfactory.opacclient.i18n.DummyStringProvider;
 import de.geeksfactory.opacclient.networking.HttpClientFactory;
 import de.geeksfactory.opacclient.objects.DetailedItem;
@@ -59,8 +60,12 @@ public class OpacAPI {
         System.out.println("First match: " + searchRequestResult.getResults().get(0).toString());
 
         System.out.println("Fetching details for the first result...");
-        DetailedItem detailedItem = api.getResult(0);
-        System.out.println("Got details: " + detailedItem.toString());
+        if (api instanceof Open)
+            System.out.println("detailedItem item not supported:-(");
+        else {
+            DetailedItem detailedItem = api.getResult(0);
+            System.out.println("Got details: " + detailedItem.toString());
+        }
     }
 
 
