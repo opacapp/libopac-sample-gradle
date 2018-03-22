@@ -2,6 +2,8 @@ package de.codefor.opacapi;
 
 import de.geeksfactory.opacclient.OpacApiFactory;
 import de.geeksfactory.opacclient.apis.OpacApi;
+import de.geeksfactory.opacclient.i18n.DummyStringProvider;
+import de.geeksfactory.opacclient.networking.HttpClientFactory;
 import de.geeksfactory.opacclient.objects.DetailedItem;
 import de.geeksfactory.opacclient.objects.Library;
 import de.geeksfactory.opacclient.objects.SearchRequestResult;
@@ -9,6 +11,7 @@ import de.geeksfactory.opacclient.searchfields.SearchField;
 import de.geeksfactory.opacclient.searchfields.SearchQuery;
 import de.geeksfactory.opacclient.networking.NotReachableException;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +22,7 @@ import java.util.List;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.Security;
 
 public class OpacAPI {
 
@@ -29,6 +33,9 @@ public class OpacAPI {
     public static String LIBRARY_JSON = "../opacapp-config-files/bibs/Erlangen.json";
 
     public static void main(final String[] args) throws JSONException, OpacApi.OpacErrorException, IOException {
+
+        Security.addProvider(new BouncyCastleProvider());
+
         System.out.println("Hello OPAC!");
 
         // Create a library object
@@ -36,7 +43,8 @@ public class OpacAPI {
         library = Library.fromJSON(LIBRARY_NAME, new JSONObject(readFile(LIBRARY_JSON)));
 
         // Instantiate the appropriate API class
-        OpacApi api = OpacApiFactory.create(library, "HelloOpac/1.0.0");
+        OpacApi api = OpacApiFactory.create(library, new DummyStringProvider(),
+                new HttpClientFactory("HelloOpac/1.0.0", new OpacAPI().pathToTrustStore()), null, null);
 
         System.out.println("Obtaining search fields...");
         List<SearchField> searchFields = api.getSearchFields();
@@ -70,5 +78,9 @@ public class OpacAPI {
         } finally {
             br.close();
         }
+    }
+
+    private String pathToTrustStore() {
+        return new File(getClass().getClassLoader().getResource("ssl_trust_store.bks").getFile()).getAbsolutePath();
     }
 }
