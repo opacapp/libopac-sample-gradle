@@ -63,9 +63,9 @@ public class OpacAPI {
         System.out.println("Got details: " + detailedItem.toString());
     }
 
+
     private static String readFile(String fileName) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(fileName));
-        try {
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
 
@@ -75,8 +75,6 @@ public class OpacAPI {
                 line = br.readLine();
             }
             return sb.toString();
-        } finally {
-            br.close();
         }
     }
 
