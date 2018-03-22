@@ -10,20 +10,17 @@ import de.geeksfactory.opacclient.objects.Library;
 import de.geeksfactory.opacclient.objects.SearchRequestResult;
 import de.geeksfactory.opacclient.searchfields.SearchField;
 import de.geeksfactory.opacclient.searchfields.SearchQuery;
-import de.geeksfactory.opacclient.networking.NotReachableException;
-
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.security.Security;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OpacAPI {
 
@@ -32,6 +29,7 @@ public class OpacAPI {
 
     public static String LIBRARY_NAME = "Erlangen";
     public static String LIBRARY_JSON = "../opacapp-config-files/bibs/Erlangen.json";
+
 
     public static void main(final String[] args) throws JSONException, OpacApi.OpacErrorException, IOException {
 
@@ -51,7 +49,7 @@ public class OpacAPI {
         List<SearchField> searchFields = api.getSearchFields();
         System.out.println("Found a first search field: " + searchFields.get(0).getDisplayName());
 
-        List<SearchQuery> query = new ArrayList<SearchQuery>();
+        List<SearchQuery> query = new ArrayList<>();
         query.add(new SearchQuery(searchFields.get(0), "Hello"));
         System.out.println("Searching for 'hello' in this field...");
 
