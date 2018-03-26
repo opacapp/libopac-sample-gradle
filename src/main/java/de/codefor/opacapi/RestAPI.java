@@ -64,5 +64,23 @@ public class RestAPI {
         return searchFields;
     }
 
+    @RequestMapping(value = "/libraries",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
+            consumes = MediaType.ALL_VALUE)
+    public List<String> libraries() throws IOException, JSONException, OpacApi.OpacErrorException {
+
+        Security.addProvider(new BouncyCastleProvider());
+
+        List<String> libraries = new ArrayList<>();
+
+        File[] listOfFiles = new File("../opacapp-config-files/bibs").listFiles();
+        for (File file : listOfFiles) {
+            libraries.add(file.getName().replace(".json", ""));
+        }
+
+        return libraries;
+    }
+
 
 }
