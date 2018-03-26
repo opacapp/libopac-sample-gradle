@@ -123,7 +123,7 @@ public class OpacAPI {
         }
     }
 
-    private String pathToTrustStore() {
+    String pathToTrustStore() {
         return new File(getClass().getClassLoader().getResource("ssl_trust_store.bks").getFile()).getAbsolutePath();
     }
 }

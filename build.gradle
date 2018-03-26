@@ -26,8 +26,7 @@ bootJar {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-// mainClassName = 'net.opacapp.sample.libopacgradle.HelloOpac'
-mainClassName = 'de.codefor.opacapi.OpacAPI'
+mainClassName = 'de.codefor.opacapi.Application'
 
 repositories {
     jcenter()
