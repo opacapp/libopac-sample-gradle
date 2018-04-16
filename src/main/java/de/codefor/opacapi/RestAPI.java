@@ -44,7 +44,12 @@ public class RestAPI {
             method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
             consumes = MediaType.ALL_VALUE)
-    public SearchRequestResult search(@PathVariable String libraryName, @RequestParam String isbn, @RequestParam(required = false) String title) throws IOException, JSONException, OpacApi.OpacErrorException {
+    public SearchRequestResult search(@PathVariable String libraryName,
+                                      @RequestParam(required = false, defaultValue = "") String isbn,
+                                      @RequestParam(required = false, defaultValue = "") String author,
+                                      @RequestParam(required = false, defaultValue = "") String title)
+
+            throws IOException, JSONException, OpacApi.OpacErrorException {
 
         Security.addProvider(new BouncyCastleProvider());
 
@@ -54,21 +59,21 @@ public class RestAPI {
         OpacApi api = OpacApiFactory.create(library, new DummyStringProvider(),
                 new HttpClientFactory("HelloOpac/1.0.0", new OpacAPI().pathToTrustStore()), null, null);
 
-        List<MySearchField> searchFields = new ArrayList<>();
-
-
-        SearchField isbnSearchField = null;
+        List<SearchQuery> searchQueries = new ArrayList<>();
 
         for (SearchField searchField : api.getSearchFields()) {
-            if (SearchField.Meaning.ISBN.equals(searchField.getMeaning())){
-                isbnSearchField = searchField;
+            if (SearchField.Meaning.ISBN.equals(searchField.getMeaning())) {
+                searchQueries.add(new SearchQuery(searchField, isbn));
+            }
+            if (SearchField.Meaning.AUTHOR.equals(searchField.getMeaning())) {
+                searchQueries.add(new SearchQuery(searchField, author));
+            }
+            if (SearchField.Meaning.TITLE.equals(searchField.getMeaning())) {
+                searchQueries.add(new SearchQuery(searchField, title));
             }
         }
 
-        List<SearchQuery> searchQueries = new ArrayList<>();
-        SearchQuery isbnSearchQuery = new SearchQuery(isbnSearchField, isbn);
-        searchQueries.add(isbnSearchQuery);
-
+        
         return api.search(searchQueries);
     }
 
