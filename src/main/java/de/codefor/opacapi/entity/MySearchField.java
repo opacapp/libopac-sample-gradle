@@ -1,4 +1,4 @@
-package de.codefor.opacapi;
+package de.codefor.opacapi.entity;
 
 import de.geeksfactory.opacclient.searchfields.SearchField;
 

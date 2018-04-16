@@ -1,5 +1,6 @@
 package de.codefor.opacapi;
 
+import de.codefor.opacapi.entity.MySearchField;
 import de.geeksfactory.opacclient.OpacApiFactory;
 import de.geeksfactory.opacclient.apis.OpacApi;
 import de.geeksfactory.opacclient.i18n.DummyStringProvider;
