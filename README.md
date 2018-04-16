@@ -7,6 +7,9 @@ A web API wrapper for the [opacclient][opacclient-github] library based on [Spri
 
     $ ./gradlew run
 
+This has to be uploaded on the same level in the files system
+    https://github.com/opacapp/opacapp-config-files.git
+
 This starts the Spring Boot application.
 
 A list of all libraries is returned here:
