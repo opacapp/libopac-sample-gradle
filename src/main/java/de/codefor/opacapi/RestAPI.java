@@ -54,11 +54,7 @@ public class RestAPI {
 
         Security.addProvider(new BouncyCastleProvider());
 
-        File file = new File("../opacapp-config-files/bibs/" + libraryName + ".json");
-        Library library = Library.fromJSON(libraryName, new JSONObject(readFile(file.getAbsolutePath())));
-
-        OpacApi api = OpacApiFactory.create(library, new DummyStringProvider(),
-                new HttpClientFactory("HelloOpac/1.0.0", new OpacAPI().pathToTrustStore()), null, null);
+        OpacApi api = getOpacApi(libraryName);
 
         List<SearchQuery> searchQueries = new ArrayList<>();
 
@@ -74,7 +70,7 @@ public class RestAPI {
             }
         }
 
-        
+
         return api.search(searchQueries);
     }
 
@@ -86,11 +82,7 @@ public class RestAPI {
 
         Security.addProvider(new BouncyCastleProvider());
 
-        File file = new File("../opacapp-config-files/bibs/" + libraryName + ".json");
-        Library library = Library.fromJSON(libraryName, new JSONObject(readFile(file.getAbsolutePath())));
-
-        OpacApi api = OpacApiFactory.create(library, new DummyStringProvider(),
-                new HttpClientFactory("HelloOpac/1.0.0", new OpacAPI().pathToTrustStore()), null, null);
+        OpacApi api = getOpacApi(libraryName);
 
         List<MySearchField> searchFields = new ArrayList<>();
 
@@ -99,6 +91,14 @@ public class RestAPI {
         }
 
         return searchFields;
+    }
+
+    private OpacApi getOpacApi(@PathVariable String libraryName) throws JSONException, IOException {
+        File file = new File("../opacapp-config-files/bibs/" + libraryName + ".json");
+        Library library = Library.fromJSON(libraryName, new JSONObject(readFile(file.getAbsolutePath())));
+
+        return OpacApiFactory.create(library, new DummyStringProvider(),
+                new HttpClientFactory("HelloOpac/1.0.0", new OpacAPI().pathToTrustStore()), null, null);
     }
 
     @RequestMapping(value = "/libraries",
