@@ -8,8 +8,8 @@ buildscript {
 }
 
 
-group 'opacapi'
-version '1.0-SNAPSHOT'
+group= 'opacapi'
+version= '1.0-SNAPSHOT'
 
 
 
@@ -34,8 +34,8 @@ repositories {
 }
 
 dependencies {
-    compile 'net.opacapp:libopac:5.2.5'
-    compile group: 'org.bouncycastle', name: 'bcprov-jdk16', version: '1.45'
+    compile('net.opacapp:libopac:5.2.5')
+    compile(group: 'org.bouncycastle', name: 'bcprov-jdk16', version: '1.45')
     compile("org.springframework.boot:spring-boot-starter-web")
 }
 
