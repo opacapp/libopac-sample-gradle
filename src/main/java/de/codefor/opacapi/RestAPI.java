@@ -5,15 +5,14 @@ import de.geeksfactory.opacclient.apis.OpacApi;
 import de.geeksfactory.opacclient.i18n.DummyStringProvider;
 import de.geeksfactory.opacclient.networking.HttpClientFactory;
 import de.geeksfactory.opacclient.objects.Library;
+import de.geeksfactory.opacclient.objects.SearchRequestResult;
 import de.geeksfactory.opacclient.searchfields.SearchField;
+import de.geeksfactory.opacclient.searchfields.SearchQuery;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -39,6 +38,38 @@ public class RestAPI {
             }
             return sb.toString();
         }
+    }
+
+    @RequestMapping(value = "/library/{libraryName}/search",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
+            consumes = MediaType.ALL_VALUE)
+    public SearchRequestResult search(@PathVariable String libraryName, @RequestParam String isbn, @RequestParam(required = false) String title) throws IOException, JSONException, OpacApi.OpacErrorException {
+
+        Security.addProvider(new BouncyCastleProvider());
+
+        File file = new File("../opacapp-config-files/bibs/" + libraryName + ".json");
+        Library library = Library.fromJSON(libraryName, new JSONObject(readFile(file.getAbsolutePath())));
+
+        OpacApi api = OpacApiFactory.create(library, new DummyStringProvider(),
+                new HttpClientFactory("HelloOpac/1.0.0", new OpacAPI().pathToTrustStore()), null, null);
+
+        List<MySearchField> searchFields = new ArrayList<>();
+
+
+        SearchField isbnSearchField = null;
+
+        for (SearchField searchField : api.getSearchFields()) {
+            if (SearchField.Meaning.ISBN.equals(searchField.getMeaning())){
+                isbnSearchField = searchField;
+            }
+        }
+
+        List<SearchQuery> searchQueries = new ArrayList<>();
+        SearchQuery isbnSearchQuery = new SearchQuery(isbnSearchField, isbn);
+        searchQueries.add(isbnSearchQuery);
+
+        return api.search(searchQueries);
     }
 
     @RequestMapping(value = "/library/{libraryName}/searchFields",
