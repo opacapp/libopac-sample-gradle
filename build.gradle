@@ -14,6 +14,7 @@ version= '1.0-SNAPSHOT'
 
 
 apply plugin: 'java'
+apply plugin: 'idea'
 apply plugin: 'application'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
@@ -41,5 +42,5 @@ dependencies {
 
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.0'
+    gradleVersion = '4.6'
 }
