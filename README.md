@@ -19,6 +19,10 @@ The search fields for a library can be found at:
 
     http://localhost:8080/library/{libraryName}/searchFields
 
+Search books by isbn:
+
+    http://localhost:8080/library/{libraryName}/{isbn}
+
 
 [opacclient-github]: https://github.com/opacapp/opacclient
 [spring-boot-website]: https://projects.spring.io/spring-boot/
