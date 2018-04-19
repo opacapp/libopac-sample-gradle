@@ -1,11 +1,27 @@
 # opacapi
 
-Usage:
+A web API wrapper for the [opacclient][opacclient-github] library based on [Spring Boot][spring-boot-website].
 
-    $ gradlew run
+## Usage
 
-More will follow.
+    $ ./gradlew run
 
+This has to be uploaded on the same level in the files system
+    https://github.com/opacapp/opacapp-config-files.git
+
+This starts the Spring Boot application.
+
+A list of all libraries is returned here:
+
+    http://localhost:8080/libraries
+
+The search fields for a library can be found at:
+
+    http://localhost:8080/library/{libraryName}/searchFields
+
+
+[opacclient-github]: https://github.com/opacapp/opacclient
+[spring-boot-website]: https://projects.spring.io/spring-boot/
 
 ## Vision
 
@@ -21,3 +37,4 @@ It also means that we a are probably good with two endpoints:
 
 - [ ] An endpoint where people can get a list of libraries and select the one closest to them 
 - [ ] An endpoint where we can find the availaiblity status of a book given its ISBN for their library of choice
+
