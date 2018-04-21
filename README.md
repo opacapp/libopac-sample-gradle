@@ -31,10 +31,10 @@ The idea was to do this by providing a centralised Web-API as an interface to al
 
 ### MVP
 
-This means that the MVP of this application is actually quite small in scope: As users want to select their local library the API should provide data per library. The only question that we really want to answer is: Does my public library have the book with the ISBN I am currenlty looking at - and if yes how many copies are available right now. 
+This means that the MVP of this application is actually quite small in scope: As users want to select their local library the API should provide data per library. The only question that we really want to answer is: Does my public library have the book with the ISBN I am currently looking at - and if yes how many copies are available right now. 
 
-It also means that we a are probably good with two endpoints: 
+It also means that we are probably good with two endpoints: 
 
 - [ ] An endpoint where people can get a list of libraries and select the one closest to them 
-- [ ] An endpoint where we can find the availaiblity status of a book given its ISBN for their library of choice
+- [ ] An endpoint where we can find the availability status of a book given its ISBN for their library of choice
 
