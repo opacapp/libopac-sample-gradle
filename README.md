@@ -17,11 +17,11 @@ A list of all libraries is returned here:
 
 The search fields for a library can be found at:
 
-    http://localhost:8080/library/{libraryName}/searchFields
+    http://localhost:8080/libraries/{libraryName}/searchFields
 
 Search books by isbn:
 
-    http://localhost:8080/library/{libraryName}/{isbn}
+    http://localhost:8080/libraries/{libraryName}/{isbn}
 
 
 [opacclient-github]: https://github.com/opacapp/opacclient
