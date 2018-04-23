@@ -29,7 +29,7 @@ public class ISBNTest {
     }
 
     @Test
-    public void testISBN_3557771677_inalid_10() {
+    public void testISBN_3557771677_invalid_10() {
 
         ISBN isbnUnderTest = new ISBN("3557771677");
 
