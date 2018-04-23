@@ -1,6 +1,12 @@
 package de.codefor.opacapi;
 
+import de.codefor.opacapi.entity.ISBN;
 import de.codefor.opacapi.entity.MySearchField;
+import de.codefor.opacapi.entity.SearchQueries;
+import de.codefor.opacapi.exception.LibraryNotFound;
+import de.codefor.opacapi.exception.SearchFailed;
+import de.codefor.opacapi.result.MyResult;
+import de.codefor.opacapi.result.MySearchResult;
 import de.geeksfactory.opacclient.OpacApiFactory;
 import de.geeksfactory.opacclient.apis.OpacApi;
 import de.geeksfactory.opacclient.i18n.DummyStringProvider;
@@ -74,6 +80,28 @@ public class RestAPI {
         return api.search(searchQueries);
     }
 
+    @RequestMapping(value = "/library/{libraryName}/{isbn}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
+            consumes = MediaType.ALL_VALUE)
+    public MyResult fetchByISBN(@PathVariable String libraryName,
+                                @PathVariable String isbn) {
+        new ISBN(isbn).checkValidity();
+
+        Security.addProvider(new BouncyCastleProvider());
+
+        OpacApi api = getOpacApi(libraryName);
+
+        try {
+            return new MySearchResult(
+                    api.search(SearchQueries.builder(api.getSearchFields())
+                            .isbn(isbn).build()));
+        } catch (IOException | OpacApi.OpacErrorException | JSONException e) {
+            e.printStackTrace();
+            throw new SearchFailed();
+        }
+    }
+
     @RequestMapping(value = "/library/{libraryName}/searchFields",
             method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
@@ -93,19 +121,25 @@ public class RestAPI {
         return searchFields;
     }
 
-    private OpacApi getOpacApi(@PathVariable String libraryName) throws JSONException, IOException {
-        File file = new File("../opacapp-config-files/bibs/" + libraryName + ".json");
-        Library library = Library.fromJSON(libraryName, new JSONObject(readFile(file.getAbsolutePath())));
+    private OpacApi getOpacApi(@PathVariable String libraryName) {
+        try {
+            File file = new File("../opacapp-config-files/bibs/" + libraryName + ".json");
+            Library library = Library.fromJSON(libraryName, new JSONObject(readFile(file.getAbsolutePath())));
+            return OpacApiFactory.create(library, new DummyStringProvider(),
+                    new HttpClientFactory("HelloOpac/1.0.0", new OpacAPI().pathToTrustStore()), null, null);
 
-        return OpacApiFactory.create(library, new DummyStringProvider(),
-                new HttpClientFactory("HelloOpac/1.0.0", new OpacAPI().pathToTrustStore()), null, null);
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+            throw new LibraryNotFound(libraryName);
+        }
+
     }
 
     @RequestMapping(value = "/libraries",
             method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
             consumes = MediaType.ALL_VALUE)
-    public List<String> libraries() throws IOException, JSONException, OpacApi.OpacErrorException {
+    public List<String> libraries() {
 
         Security.addProvider(new BouncyCastleProvider());
 
