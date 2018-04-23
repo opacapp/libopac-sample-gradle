@@ -31,7 +31,7 @@ public class RestAPITest {
 
     @Test
     public void getSearchFieldFromLibrary() throws Exception {
-        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/library/Erlangen/searchFields",
+        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/libraries/Erlangen/searchFields",
                 String.class)).contains("{\"id\":\"Free\",\"displayName\":\"Stichwort\",\"advanced\":false,\"visible\":true}");
     }
 

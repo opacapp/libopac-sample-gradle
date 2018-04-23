@@ -32,7 +32,6 @@ import java.util.List;
 @RestController
 public class RestAPI {
 
-
     private static String readFile(String fileName) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             StringBuilder sb = new StringBuilder();
@@ -47,7 +46,7 @@ public class RestAPI {
         }
     }
 
-    @RequestMapping(value = "/library/{libraryName}/search",
+    @RequestMapping(value = "/libraries/{libraryName}/search",
             method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
             consumes = MediaType.ALL_VALUE)
@@ -80,7 +79,7 @@ public class RestAPI {
         return api.search(searchQueries);
     }
 
-    @RequestMapping(value = "/library/{libraryName}/{isbn}",
+    @RequestMapping(value = "/libraries/{libraryName}/{isbn}",
             method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
             consumes = MediaType.ALL_VALUE)
@@ -102,7 +101,7 @@ public class RestAPI {
         }
     }
 
-    @RequestMapping(value = "/library/{libraryName}/searchFields",
+    @RequestMapping(value = "/libraries/{libraryName}/searchFields",
             method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
             consumes = MediaType.ALL_VALUE)
