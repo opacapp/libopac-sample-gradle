@@ -2,7 +2,6 @@ package de.codefor.opacapi.entity;
 
 import de.codefor.opacapi.exception.InvalidISBN;
 
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class ISBN {
@@ -29,12 +28,9 @@ public class ISBN {
 
         int[] numbers = Stream.of(isbn.split("")).mapToInt(Integer::parseInt).toArray();
 
-        System.out.println(Arrays.toString(numbers));
-
-
         switch (isbn.length()) {
             case 10:
-                return (1 * numbers[0] + 2 * numbers[1] + 3 * numbers[2] + 4 * numbers[3] + 5 * numbers[4] +
+                return (numbers[0] + 2 * numbers[1] + 3 * numbers[2] + 4 * numbers[3] + 5 * numbers[4] +
                         6 * numbers[5] + 7 * numbers[6] + 8 * numbers[7] + 9 * numbers[8]) % 11 == numbers[9];
             case 13:
                 return (numbers[0] + numbers[2] + numbers[4] + numbers[6] + numbers[8] + numbers[10] + numbers[12] +
