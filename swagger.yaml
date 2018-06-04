@@ -1,0 +1,123 @@
+swagger: '2.0'
+info:
+  description: This is the web version of the libopac Java library
+  version: 0.1.0
+  title: libopac-web-api
+  contact:
+    email: opac@k-nut.eu
+host: berlin.codefor.de
+basePath: /
+tags:
+  - name: media_data
+    description: Information about things to borrow from the libraries
+    
+schemes:
+  - https
+  
+paths:
+  '/libraries/{libraryName}/search':
+    get:
+      tags:
+        - media_data
+      summary: Search for media - libopac style
+      description: Search for media - strutured after libopac
+      produces:
+        - application/json
+      parameters:
+        - name: libraryName
+          in: path
+          description: ID of of the library
+          required: true
+          type: string
+        - name: title
+          in: query
+          description: Title
+          required: false
+          type: string
+        - name: author
+          in: query
+          description: Author
+          required: false
+          type: string
+        - name: isbn
+          in: query
+          description: resolution of data
+          required: false
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/RawResult'
+        '400':
+          description: Invalid tag value
+  '/libraries/{libraryName}/catalog/search':
+    get:
+      tags:
+        - media_data
+      summary: Search for media - libraryextension style
+      description: Search for media - strutured after libraryextension
+      produces:
+        - application/json
+      parameters:
+        - name: libraryName
+          in: path
+          description: ID of of the library
+          required: true
+          type: string
+        - name: searchTerm
+          in: query
+          description: The Name of the Field in which to search
+          required: true
+          type: string
+          enum:
+            - ISBN
+            - ISBN13
+            - Title
+        - name: term
+          in: query
+          description: The string to search for
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/StructuredResponse'
+        '400':
+          description: Invalid tag value        
+          
+definitions:
+  RawResult:
+    type: object
+    properties:
+      type:
+        type: string
+      nr:
+        type: number
+      id:
+        type: string
+      innerhtml:
+        type: string
+      status:
+        type: string
+        enum:
+          - GREEN
+          - RED
+      coverBitmap:
+        type: string
+      page:
+        type: number
+      childquery:
+        type: string
+
+    
+  StructuredResponse:
+    type: object
+    properties:
+      id:
+        type: string
+      infoHtml:
+        type: string
+      format:
+        type: string
