@@ -73,8 +73,8 @@ paths:
       responses:
         '200':
           description: successful operation
-          ##schema:
-            ##$ref: '#/definitions/RecordDetail'
+          schema:
+            $ref: '#/definitions/RecordDetails'
         '400':
           description: Invalid input
   '/libraries/{libraryName}/catalog/search':
@@ -111,7 +111,58 @@ paths:
           schema:
             $ref: '#/definitions/StructuredResponse'
         '400':
-          description: Invalid tag value        
+          description: Invalid input
+  '/libraries/{libraryName}/record/{id}':
+    get:
+      tags:
+        - media_data
+      summary: Retrieve book by id - libraryextension style
+      produces:
+        - application/json
+      parameters:
+        - name: libraryName
+          in: path
+          description: ID of the library
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: ID of the media
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Details'
+        '400':
+          description: Invalid input
+  '/libraries/{libraryName}/record/branches/{id}':
+    get:
+      tags:
+        - media_data
+      summary: Availability Endpoint
+      produces:
+        - application/json
+      parameters:
+      - name: libraryName
+        in: path
+        description: ID of the library
+        required: true
+        type: string
+      - name: id
+        in: path
+        description: ID of the media
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Availability'
+        '400':
+          description: Invalid input
+
           
 definitions:
   RawResult:
@@ -148,14 +199,33 @@ definitions:
       format:
         type: string
 
-  RecordDetails:
+  Details:
     type: object
     properties:
-      items:
+      details:
+          $ref: '#/definitions/Details1'
+  Details1:
+    type: object
+    properties:
+      total_copies:
+        type: integer
+        example: 1
+      available_copies:
+        type: integer
+        example: 1
+      branches:
         type: array
         items:
-          $ref: '#/definitions/RecordDetail'
-
+          type: String
+          example: "ZB Grimm-Zentrum"
+  Availability:
+    type: object
+    properties:
+      branches:
+        type: array
+        items:
+          type: String
+          example: "ZB Grimm-Zentrum"
   RecordDetail:
     type: object
     properties:
@@ -165,3 +235,10 @@ definitions:
       availability:
         type: string
         example: RESTRICTED
+  RecordDetails:
+    type: object
+    properties:
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/RecordDetail'
