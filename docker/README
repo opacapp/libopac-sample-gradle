@@ -1,0 +1,7 @@
+Usage
+=====
+
+```bash
+docker build . -t opacapi
+docker run -p 8080:8080 opacapi
+```
