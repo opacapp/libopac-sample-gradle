@@ -20,13 +20,13 @@ paths:
       tags:
         - media_data
       summary: Search for media - libopac style
-      description: Search for media - strutured after libopac
+      description: Search for media - structured after libopac
       produces:
         - application/json
       parameters:
         - name: libraryName
           in: path
-          description: ID of of the library
+          description: ID of the library
           required: true
           type: string
         - name: title
@@ -41,7 +41,7 @@ paths:
           type: string
         - name: isbn
           in: query
-          description: resolution of data
+          description: ISBN
           required: false
           type: string
       responses:
@@ -51,18 +51,44 @@ paths:
             $ref: '#/definitions/RawResult'
         '400':
           description: Invalid tag value
-  '/libraries/{libraryName}/catalog/search':
+  '/libraries/{libraryName}/{isbn}':
     get:
       tags:
         - media_data
-      summary: Search for media - libraryextension style
-      description: Search for media - strutured after libraryextension
+      summary: Retrieve information by ISBN10 or ISBN13
+      description:  Record Details Endpoint structured after libraryextension
       produces:
         - application/json
       parameters:
         - name: libraryName
           in: path
-          description: ID of of the library
+          description: ID of the library
+          required: true
+          type: string
+        - name: isbn
+          in: path
+          description: ISBN of the book
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/RecordDetails'
+        '400':
+          description: Invalid input
+  '/libraries/{libraryName}/catalog/search':
+    get:
+      tags:
+        - media_data
+      summary: Search for media - libraryextension style
+      description: Search for media - structured after libraryextension
+      produces:
+        - application/json
+      parameters:
+        - name: libraryName
+          in: path
+          description: ID of the library
           required: true
           type: string
         - name: searchTerm
@@ -85,7 +111,58 @@ paths:
           schema:
             $ref: '#/definitions/StructuredResponse'
         '400':
-          description: Invalid tag value        
+          description: Invalid input
+  '/libraries/{libraryName}/record/{id}':
+    get:
+      tags:
+        - media_data
+      summary: Retrieve book by id - libraryextension style
+      produces:
+        - application/json
+      parameters:
+        - name: libraryName
+          in: path
+          description: ID of the library
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: ID of the media
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Details'
+        '400':
+          description: Invalid input
+  '/libraries/{libraryName}/record/branches/{id}':
+    get:
+      tags:
+        - media_data
+      summary: Availability Endpoint
+      produces:
+        - application/json
+      parameters:
+      - name: libraryName
+        in: path
+        description: ID of the library
+        required: true
+        type: string
+      - name: id
+        in: path
+        description: ID of the media
+        required: true
+        type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Availability'
+        '400':
+          description: Invalid input
+
           
 definitions:
   RawResult:
@@ -121,3 +198,47 @@ definitions:
         type: string
       format:
         type: string
+
+  Details:
+    type: object
+    properties:
+      details:
+          $ref: '#/definitions/Details1'
+  Details1:
+    type: object
+    properties:
+      total_copies:
+        type: integer
+        example: 1
+      available_copies:
+        type: integer
+        example: 1
+      branches:
+        type: array
+        items:
+          type: string
+          example: "ZB Grimm-Zentrum"
+  Availability:
+    type: object
+    properties:
+      branches:
+        type: array
+        items:
+          type: string
+          example: "ZB Grimm-Zentrum"
+  RecordDetail:
+    type: object
+    properties:
+      description:
+        type: string
+        example: <b>Der Weg des Bogens</b><br />Coelho, Paulo<br />2017
+      availability:
+        type: string
+        example: RESTRICTED
+  RecordDetails:
+    type: object
+    properties:
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/RecordDetail'

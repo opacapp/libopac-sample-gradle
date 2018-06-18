@@ -1,6 +1,9 @@
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+            url = "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.0.RELEASE")
@@ -8,10 +11,8 @@ buildscript {
 }
 
 
-group= 'opacapi'
-version= '1.0-SNAPSHOT'
-
-
+group = 'opacapi'
+version = '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -19,9 +20,10 @@ apply plugin: 'application'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
+
 bootJar {
-    baseName = 'gs-rest-service'
-    version =  '0.1.0'
+    baseName = 'opacapijar'
+    version = '0.1.0'
 }
 
 sourceCompatibility = 1.8

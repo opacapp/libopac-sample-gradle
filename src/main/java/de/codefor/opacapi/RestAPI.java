@@ -1,8 +1,7 @@
 package de.codefor.opacapi;
 
-import de.codefor.opacapi.entity.ISBN;
-import de.codefor.opacapi.entity.MySearchField;
-import de.codefor.opacapi.entity.SearchQueries;
+import de.codefor.opacapi.entity.*;
+import de.codefor.opacapi.exception.InvalidSearchTerm;
 import de.codefor.opacapi.exception.LibraryNotFound;
 import de.codefor.opacapi.exception.SearchFailed;
 import de.codefor.opacapi.result.MyResult;
@@ -27,7 +26,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.security.Security;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class RestAPI {
@@ -120,7 +121,87 @@ public class RestAPI {
         return searchFields;
     }
 
-    private OpacApi getOpacApi(@PathVariable String libraryName) {
+
+    @RequestMapping(value = "/libraries/{libraryName}/catalog/search",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
+            consumes = MediaType.ALL_VALUE)
+    public CatalogSearchResults search(@PathVariable String libraryName,
+                                       @RequestParam() String term,
+                                       @RequestParam() String searchTerm)
+            throws IOException, JSONException, OpacApi.OpacErrorException {
+
+        checkSearchTerm(searchTerm);
+
+        Security.addProvider(new BouncyCastleProvider());
+
+        Map<String, SearchRequestResult> results = new HashMap<>();
+
+        OpacApi api = getOpacApi(libraryName);
+
+        List<SearchQuery> searchQueries = new ArrayList<>();
+
+        if (searchTerm.equalsIgnoreCase("Title")) {
+            for (SearchField searchField : api.getSearchFields()) {
+                if (SearchField.Meaning.TITLE.equals(searchField.getMeaning())) {
+                    searchQueries.add(new SearchQuery(searchField, term));
+                }
+            }
+        } else if (searchTerm.equalsIgnoreCase("ISBN") | searchTerm.equalsIgnoreCase("ISBN13")) {
+
+            for (SearchField searchField : api.getSearchFields()) {
+                if (SearchField.Meaning.ISBN.equals(searchField.getMeaning())) {
+                    searchQueries.add(new SearchQuery(searchField, term));
+                }
+            }
+        }
+
+        results.put(libraryName, api.search(searchQueries));
+
+        return new CatalogSearchResults(results);
+    }
+
+
+    @RequestMapping(value = "/libraries/{libraryName}/record/{id}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
+            consumes = MediaType.ALL_VALUE)
+    public RecordResult search(@PathVariable String libraryName,
+                               @PathVariable() String id)
+            throws IOException, OpacApi.OpacErrorException {
+
+        Security.addProvider(new BouncyCastleProvider());
+
+        OpacApi api = getOpacApi(libraryName);
+
+        return new RecordResult(api.getResultById(id, null));
+    }
+
+
+    // GET /record/branches/<id>
+    @RequestMapping(value = "/libraries/{libraryName}/record/branches/{id}",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
+            consumes = MediaType.ALL_VALUE)
+    public RecordAvailability getAvailibility(@PathVariable String libraryName,
+                                              @PathVariable() String id)
+            throws IOException, OpacApi.OpacErrorException {
+
+        Security.addProvider(new BouncyCastleProvider());
+
+        OpacApi api = getOpacApi(libraryName);
+
+        return new RecordAvailability(api.getResultById(id, null));
+    }
+
+    private void checkSearchTerm(String searchTerm) {
+        if (!searchTerm.equals("ISBN") &&
+                !searchTerm.equals("ISBN13") &&
+                !searchTerm.equals("Title"))
+            throw new InvalidSearchTerm(searchTerm);
+    }
+
+    private OpacApi getOpacApi(String libraryName) {
         try {
             File file = new File("../opacapp-config-files/bibs/" + libraryName + ".json");
             Library library = Library.fromJSON(libraryName, new JSONObject(readFile(file.getAbsolutePath())));
@@ -131,8 +212,23 @@ public class RestAPI {
             e.printStackTrace();
             throw new LibraryNotFound(libraryName);
         }
-
     }
+
+    private List<String> libraries(String nameOfCity) {
+        List<String> libraries = new ArrayList<>();
+
+        File[] listOfFiles = new File("../opacapp-config-files/bibs").listFiles();
+
+        for (File file : listOfFiles) {
+
+            String libraryName = file.getName().replace(".json", "");
+
+            libraries.add(libraryName);
+        }
+
+        return libraries;
+    }
+
 
     @RequestMapping(value = "/libraries",
             method = RequestMethod.GET,
