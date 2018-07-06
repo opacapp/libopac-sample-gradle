@@ -240,7 +240,7 @@ public class RestAPI {
 
         List<String> libraries = new ArrayList<>();
 
-        File[] listOfFiles = new File("../opacapp-config-files/bibs").listFiles();
+        File[] listOfFiles = new File("./opacapp-config-files/bibs").listFiles();
         for (File file : listOfFiles) {
             libraries.add(file.getName().replace(".json", ""));
         }
