@@ -33,6 +33,8 @@ import java.util.Map;
 @RestController
 public class RestAPI {
 
+    public static final String CONFIG_FILES_PATH = "./opacapp-config-files/bibs";
+
     private static String readFile(String fileName) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             StringBuilder sb = new StringBuilder();
@@ -46,6 +48,16 @@ public class RestAPI {
             return sb.toString();
         }
     }
+
+
+    private File[] getConfigFiles() {
+        return new File(CONFIG_FILES_PATH).listFiles();
+    }
+
+    private File getConfigFile(String libraryName) {
+        return new File(String.format("%s/%s.json", CONFIG_FILES_PATH, libraryName));
+    }
+
 
     @RequestMapping(value = "/libraries/{libraryName}/search",
             method = RequestMethod.GET,
@@ -203,7 +215,7 @@ public class RestAPI {
 
     private OpacApi getOpacApi(String libraryName) {
         try {
-            File file = new File("../opacapp-config-files/bibs/" + libraryName + ".json");
+            File file = getConfigFile(libraryName);
             Library library = Library.fromJSON(libraryName, new JSONObject(readFile(file.getAbsolutePath())));
             return OpacApiFactory.create(library, new DummyStringProvider(),
                     new HttpClientFactory("HelloOpac/1.0.0", new OpacAPI().pathToTrustStore()), null, null);
@@ -217,9 +229,7 @@ public class RestAPI {
     private List<String> libraries(String nameOfCity) {
         List<String> libraries = new ArrayList<>();
 
-        File[] listOfFiles = new File("../opacapp-config-files/bibs").listFiles();
-
-        for (File file : listOfFiles) {
+        for (File file : getConfigFiles()) {
 
             String libraryName = file.getName().replace(".json", "");
 
@@ -240,8 +250,7 @@ public class RestAPI {
 
         List<String> libraries = new ArrayList<>();
 
-        File[] listOfFiles = new File("./opacapp-config-files/bibs").listFiles();
-        for (File file : listOfFiles) {
+        for (File file : getConfigFiles()) {
             libraries.add(file.getName().replace(".json", ""));
         }
 
