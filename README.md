@@ -1,4 +1,4 @@
-# opacapi
+# opacapi [![Build Status](https://travis-ci.org/codeforberlin/opacapi.svg?branch=master)](https://travis-ci.org/codeforberlin/opacapi)
 
 A web API wrapper for the [opacclient][opacclient-github] library based on [Spring Boot][spring-boot-website].
 
