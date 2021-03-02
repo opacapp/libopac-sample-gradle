@@ -17,7 +17,7 @@ import java.util.List;
 public class HelloOpac {
 
     public static String LIBRARY_NAME = "Bremen";
-    public static String LIBRARY_CONFIG = "{\"account_supported\":true,\"api\":\"sisis\",\"city\":\"Bremen\",\"country\":\"Deutschland\",\"data\":{\"baseurl\":\"https://opac.stadtbibliothek-bremen.de/webOPACClient\"},\"geo\":[53.07929619999999,8.8016937],\"information\":\"http://www.stadtbibliothek-bremen.de/bibliotheken.php\",\"replacedby\":\"de.opacapp.bremen\",\"state\":\"Bremen\",\"title\":\"Stadtbibliothek\"}";
+    public static String LIBRARY_CONFIG = "{\"account_supported\":true,\"api\":\"sisis\",\"city\":\"Bremen\",\"country\":\"Deutschland\",\"data\":{\"baseurl\":\"https://opac.stabi-hb.de/webOPACClient\"},\"geo\":[53.07929619999999,8.8016937],\"information\":\"http://www.stadtbibliothek-bremen.de/bibliotheken.php\",\"replacedby\":\"de.opacapp.bremen\",\"state\":\"Bremen\",\"title\":\"Stadtbibliothek\"}";
 
     public static void main(final String[] args) throws JSONException, OpacApi.OpacErrorException, IOException {
         System.out.println("Hello OPAC!");
@@ -33,7 +33,7 @@ public class HelloOpac {
         List<SearchField> searchFields = api.getSearchFields();
         System.out.println("Found a first search field: " + searchFields.get(0).getDisplayName());
 
-        List<SearchQuery> query = new ArrayList<SearchQuery>();
+        List<SearchQuery> query = new ArrayList<>();
         query.add(new SearchQuery(searchFields.get(0), "Hello"));
         System.out.println("Searching for 'hello' in this field...");
 
